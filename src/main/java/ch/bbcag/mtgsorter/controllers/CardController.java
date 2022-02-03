@@ -2,7 +2,11 @@ package ch.bbcag.mtgsorter.controllers;
 
 
 import ch.bbcag.mtgsorter.models.Card;
+import ch.bbcag.mtgsorter.models.Type;
 import ch.bbcag.mtgsorter.repositories.CardRepository;
+
+import ch.bbcag.mtgsorter.repositories.TypeRepository;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +25,22 @@ public class CardController {
 
     @Autowired
     private CardRepository cardRepository;
+    @Autowired
+    private TypeRepository typeRepository;
+
+
+    @GetMapping
+    public Iterable<Card> findByCardNameAndManaColorAndType(@RequestParam(required = false) String name, @RequestParam(required = false) String color, @RequestParam(required = false) String type,
+    @RequestParam(required = false) String subtype) {
+        if (Strings.isNotBlank(name) && Strings.isNotBlank(color))return cardRepository.findByManaColorAndCardName(name, color);
+        else if (Strings.isNotBlank(color))return cardRepository.findByManaColor(color);
+        else if (Strings.isNotBlank(name)) return cardRepository.findByCardName(name);
+        if (Strings.isNotBlank(type) && Strings.isNotBlank(name))return cardRepository.findByTypeAndCardName(name, type);
+        if (Strings.isNotBlank(subtype) && Strings.isNotBlank(name))return  cardRepository.findBySubtypeAndCardName(name, subtype);
+        return cardRepository.findAll();
+    }
+
+
 
     @GetMapping(path = "{id}")
     public Card findById(@PathVariable Integer id) {

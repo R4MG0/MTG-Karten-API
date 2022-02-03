@@ -1,7 +1,6 @@
 package ch.bbcag.mtgsorter.models;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.persistence.GenerationType;
@@ -30,6 +29,46 @@ public class Card {
     @JoinColumn(name = "subtype_id")
     private Subtype subtype;
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Mana getMana() {
+        return mana;
+    }
+
+    public void setMana(Mana mana) {
+        this.mana = mana;
+    }
+
+    public Subtype getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(Subtype subtype) {
+        this.subtype = subtype;
+    }
 
     @Override
     public boolean equals(Object o) {

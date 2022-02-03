@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface ManaRepository extends CrudRepository<Mana, Integer> {
-    @Query("SELECT s FROM Subtype s WHERE s.name LIKE CONCAT('%', :name, '%')")
-    Iterable<Mana> findByName(@Param("name") String name);
+    @Query("SELECT s FROM Subtype s WHERE s.subtype LIKE CONCAT('%', :color, '%')")
+    Iterable<Mana> findByName(@Param("color") String color);
 }

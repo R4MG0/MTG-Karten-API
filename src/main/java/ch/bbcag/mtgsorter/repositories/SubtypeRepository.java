@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface SubtypeRepository extends CrudRepository<Subtype, Integer> {
-    @Query("SELECT s FROM Subtype s WHERE s.name LIKE CONCAT('%', :name, '%')")
-    Iterable<Type> findByName(@Param("name") String name);
+    @Query("SELECT s FROM Subtype s WHERE s.subtype LIKE CONCAT('%', :name, '%')")
+    Iterable<Subtype> findByName(@Param("name") String name);
 
 }

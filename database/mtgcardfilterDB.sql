@@ -1,109 +1,95 @@
-DROP database IF EXISTS `MtgCardFilter`;
-create database MtgCardFilter;
+-- MySQL Workbench Forward Engineering
 
-use MtgCardFilter;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
---
--- Table structure for table `card`
---
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema mtgcardfilter
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `mtgcardfilter` ;
 
-DROP TABLE IF EXISTS `card`;
-CREATE TABLE `card` (
-                        `id` int NOT NULL auto_increment,
-                        `Name` varchar(45) DEFAULT NULL,
-                        `Mana_id` int NOT NULL,
-                        `type_id` int NOT NULL,
-                        `subtype_id` int NOT NULL,
-                        PRIMARY KEY (`id`,`Mana_id`,`type_id`,`subtype_id`),
-                        KEY `fk_Card_Mana_idx` (`Mana_id`),
-                        KEY `fk_Card_type1_idx` (`type_id`),
-                        KEY `fk_Card_subtype1_idx` (`subtype_id`),
-                        CONSTRAINT `fk_Card_Mana` FOREIGN KEY (`Mana_id`) REFERENCES `mana` (`id`),
-                        CONSTRAINT `fk_Card_subtype1` FOREIGN KEY (`subtype_id`) REFERENCES `subtype` (`id`),
-                        CONSTRAINT `fk_Card_type1` FOREIGN KEY (`type_id`) REFERENCES `type` (`id`)
-);
+-- -----------------------------------------------------
+-- Schema mtgcardfilter
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mtgcardfilter` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `mtgcardfilter` ;
 
-Insert into card (name, Mana_id, type_id, subtype_id)
-values
-    ("Cemetry Gatekeeper", 3, 1, 1),
-    ("Edgar, Charmed Groom", 7, 5, 1),
-    ("Olivia's Attendats", 10, 1, 1),
-    ("Sanctify", 13, 3, 5),
-    ("Bleed Dry", 11, 2, 5),
-    ("Chitterspitter", 12, 4, 5),
-    ("Scurry Oak", 12, 1, 2),
-    ("Squirrel Mob", 12, 1, 2),
-    ("Sylvan Anthem", 5, 6, 5),
-    ("Lightning Bolt", 3, 2, 5),
-    ("Immerwolf", 14, 1, 3),
-    ("Nightpack Ambusher", 12, 1, 3);
+-- -----------------------------------------------------
+-- Table `mtgcardfilter`.`mana`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mtgcardfilter`.`mana` ;
+
+CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`mana` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `color` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 
---
--- Table structure for table `mana`
---
+-- -----------------------------------------------------
+-- Table `mtgcardfilter`.`subtype`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mtgcardfilter`.`subtype` ;
 
-DROP TABLE IF EXISTS `mana`;
-CREATE TABLE `mana` (
-                        `id` int NOT NULL,
-                        `color` varchar(45) DEFAULT NULL,
-                        PRIMARY KEY (`id`)
-);
+CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`subtype` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-Insert into mana (id, color)
-values
-    (1,"black"),
-    (2, "white"),
-    (3, "red"),
-    (4, "blue"),
-    (5, "green"),
-    (6, "colorless"),
-    (7, "black and white and colorless"),
-    (8, "black and red and colorless"),
-    (9, "black and green and colorless"),
-    (10, "red and colorless"),
-    (11, "black and colorless"),
-    (12, "green and colorless"),
-    (13, "white and colorless"),
-    (14, "red and green");
 
-Select * from mana;
---
--- Table structure for table `subtype`
---
+-- -----------------------------------------------------
+-- Table `mtgcardfilter`.`type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mtgcardfilter`.`type` ;
 
-DROP TABLE IF EXISTS `subtype`;
-CREATE TABLE `subtype` (
-                           `id` int NOT NULL,
-                           `name` varchar(255) DEFAULT NULL,
-                           PRIMARY KEY (`id`)
-) ;
+CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`type` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-insert into subtype (id, name)
-values
-    (1, "vampire"),
-    (2, "squirrel"),
-    (3, "wolf"),
-    (4, "human"),
-    (5, "none");
---
--- Table structure for table `type`
---
 
-DROP TABLE IF EXISTS `type`;
-CREATE TABLE `type` (
-                        `id` int NOT NULL,
-                        `name` varchar(45) DEFAULT NULL,
-                        PRIMARY KEY (`id`)
-);
+-- -----------------------------------------------------
+-- Table `mtgcardfilter`.`card`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mtgcardfilter`.`card` ;
 
-insert into type (id, name)
-values
-    (1, "creature"),
-    (2, "instant"),
-    (3, "sorcery"),
-    (4, "artifact"),
-    (5, "legendary creature"),
-    (6, "enchantment");
+CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`card` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(45) NULL DEFAULT NULL,
+  `Mana_id` INT NOT NULL,
+  `type_id` INT NOT NULL,
+  `subtype_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Mana_id`, `type_id`, `subtype_id`),
+  INDEX `fk_Card_Mana_idx` (`Mana_id` ASC) VISIBLE,
+  INDEX `fk_Card_type1_idx` (`type_id` ASC) VISIBLE,
+  INDEX `fk_Card_subtype1_idx` (`subtype_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Card_Mana`
+    FOREIGN KEY (`Mana_id`)
+    REFERENCES `mtgcardfilter`.`mana` (`id`),
+  CONSTRAINT `fk_Card_subtype1`
+    FOREIGN KEY (`subtype_id`)
+    REFERENCES `mtgcardfilter`.`subtype` (`id`),
+  CONSTRAINT `fk_Card_type1`
+    FOREIGN KEY (`type_id`)
+    REFERENCES `mtgcardfilter`.`type` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-select * from card;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
