@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `mtgcardfilter`.`type` ;
 
 CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`type` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL DEFAULT NULL,
+  `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -67,23 +67,26 @@ DROP TABLE IF EXISTS `mtgcardfilter`.`card` ;
 
 CREATE TABLE IF NOT EXISTS `mtgcardfilter`.`card` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(45) NULL DEFAULT NULL,
-  `Mana_id` INT NOT NULL,
-  `type_id` INT NOT NULL,
-  `subtype_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `Mana_id`, `type_id`, `subtype_id`),
+  `Name` VARCHAR(45) NOT NULL,
+  `Mana_id` INT NULL,
+  `type_id` INT NULL,
+  `subtype_id` INT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_Card_Mana_idx` (`Mana_id` ASC) VISIBLE,
   INDEX `fk_Card_type1_idx` (`type_id` ASC) VISIBLE,
   INDEX `fk_Card_subtype1_idx` (`subtype_id` ASC) VISIBLE,
   CONSTRAINT `fk_Card_Mana`
     FOREIGN KEY (`Mana_id`)
-    REFERENCES `mtgcardfilter`.`mana` (`id`),
+    REFERENCES `mtgcardfilter`.`mana` (`id`)
+    ON DELETE SET NULL,
   CONSTRAINT `fk_Card_subtype1`
     FOREIGN KEY (`subtype_id`)
-    REFERENCES `mtgcardfilter`.`subtype` (`id`),
+    REFERENCES `mtgcardfilter`.`subtype` (`id`)
+    ON DELETE SET NULL,
   CONSTRAINT `fk_Card_type1`
     FOREIGN KEY (`type_id`)
-    REFERENCES `mtgcardfilter`.`type` (`id`))
+    REFERENCES `mtgcardfilter`.`type` (`id`)
+    ON DELETE SET NULL)
 ENGINE = InnoDB
 AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb4

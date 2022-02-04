@@ -13,10 +13,8 @@ public class Type {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "type is required")
     @NotBlank(message = "Type can't be empty")
     @Column(name = "name")
     private String type;
