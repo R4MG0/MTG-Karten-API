@@ -2,7 +2,6 @@ package ch.bbcag.mtgsorter.repositories;
 
 
 import ch.bbcag.mtgsorter.models.Card;
-import ch.bbcag.mtgsorter.models.Type;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +14,16 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
             "JOIN c.mana m " +
             "WHERE m.color LIKE CONCAT('%', :manaColor, '%')")
     Iterable<Card> findByManaColor(@Param("manaColor") String manaColor);
+
+    @Query("SELECT c FROM Card c " +
+            "JOIN c.type t " +
+            "WHERE t.type LIKE CONCAT('%', :type, '%')")
+    Iterable<Card> findByType(@Param("type") String type);
+
+    @Query("SELECT c FROM Card c " +
+            "JOIN c.subtype s " +
+            "WHERE s.subtype LIKE CONCAT('%', :subtype, '%')")
+    Iterable<Card> findBySubtype(@Param("subtype") String subtype);
 
     @Query("SELECT c FROM Card c " +
             "JOIN c.mana m " +
@@ -34,4 +43,10 @@ public interface CardRepository extends CrudRepository<Card, Integer> {
             "AND s.subtype LIKE CONCAT('%', :subtype, '%') ")
     Iterable<Card> findBySubtypeAndCardName(@Param("name") String name, @Param("subtype") String subtype);
 
+    @Query("SELECT DISTINCT c FROM Card c " +
+            "JOIN c.subtype s " +
+            "JOIN c.mana m " +
+            "Where s.subtype LIKE CONCAT('%', :subtype, '%') " +
+            "AND m.color LIKE CONCAT('%', :color, '%') ")
+    Iterable<Card> findBySubtypeAndColor(@Param("subtype") String subtype, @Param("color") String color);
 }
