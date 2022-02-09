@@ -23,8 +23,11 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/mana")
 public class ManaController {
-    @Autowired
     private ManaRepository manaRepository;
+
+    public ManaController(ManaRepository manaRepository) {
+        this.manaRepository = manaRepository;
+    }
 
     @Operation(summary = "Find Mana with a given color." +
             " If mana color is blank, all mana colors will be returned. ")

@@ -22,12 +22,6 @@ import static ch.bbcag.mtgsorter.security.SecurityConstants.SIGN_UP_URL;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public SecurityConfiguration( BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
