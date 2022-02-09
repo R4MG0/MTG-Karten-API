@@ -1,9 +1,6 @@
 package ch.bbcag.mtgsorter.controllers;
 
-import ch.bbcag.mtgsorter.models.Card;
-import ch.bbcag.mtgsorter.models.Mana;
 import ch.bbcag.mtgsorter.models.Subtype;
-import ch.bbcag.mtgsorter.models.Type;
 import ch.bbcag.mtgsorter.repositories.SubtypeRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,9 +33,9 @@ public class SubtypeConroller {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Subtype.class))})})
     @GetMapping
-    public Iterable<Subtype> findByName(@RequestParam(required = false) String color) {
-        if (Strings.isNotBlank(color)) {
-           return subtypeRepository.findByName(color);
+    public Iterable<Subtype> findByName(@RequestParam(required = false) String subtype) {
+        if (Strings.isNotBlank(subtype)) {
+           return subtypeRepository.findByName(subtype);
         }
         return subtypeRepository.findAll();
     }

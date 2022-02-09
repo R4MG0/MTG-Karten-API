@@ -65,11 +65,30 @@ public class ManaControllerTest {
     }
 
     @Test
+    public void checkGet_whenNotExistingColor_thenNoColorsAreReturned() throws Exception {
+        String manaName = "NotExistingCard";
+
+        mockMvc.perform(get("/mana")
+                        .contentType("application/json")
+                        .queryParam("mana", manaName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     public void checkPut_whenValidMana_thenIsOk() throws Exception {
         mockMvc.perform(put("/mana")
                         .contentType("application/json")
                         .content("{\"color\":\"NewColor\", \"manaID\":\"1\"}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void checkPut_whenInValidMana_thenIsBadRequest() throws Exception {
+        mockMvc.perform(put("/mana")
+                        .contentType("application/json")
+                        .content("{\"wrongFieldName\":\"mana1\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -85,15 +104,6 @@ public class ManaControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
-    @Test
-    public void checkGet_whenNotExistingColor_thenNoColorsAreReturned() throws Exception {
-        String manaName = "NotExistingCard";
 
-        mockMvc.perform(get("/mana")
-                        .contentType("application/json")
-                        .queryParam("mana", manaName))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
-    }
 
 }

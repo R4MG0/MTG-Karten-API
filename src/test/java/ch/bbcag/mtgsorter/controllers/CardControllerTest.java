@@ -72,11 +72,30 @@ public class CardControllerTest {
     }
 
     @Test
+    public void checkGet_whenNotExistingName_thenNoCardsAreReturned() throws Exception {
+        String cardName = "NotExistingCard";
+
+        mockMvc.perform(get("/card")
+                        .contentType("application/json")
+                        .queryParam("card", cardName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     public void checkPut_whenValidCard_thenIsOk() throws Exception {
-        mockMvc.perform(put("/card")
+        mockMvc.perform(put("/card/1")
                         .contentType("application/json")
                         .content("{\"name\":\"NewCard\", \"cardId\":\"1\"}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void checkPut_whenInValidCard_thenIsBadRequest() throws Exception {
+        mockMvc.perform(put("/card/1")
+                        .contentType("application/json")
+                        .content("{\"invalidName\":\"NewCard1\", \"InvalidcardId\":\"invalidId\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -92,14 +111,5 @@ public class CardControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
-    @Test
-    public void checkGet_whenNotExistingName_thenNoCardsAreReturned() throws Exception {
-        String cardName = "NotExistingCard";
 
-        mockMvc.perform(get("/card")
-                        .contentType("application/json")
-                        .queryParam("card", cardName))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
-    }
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,11 +65,30 @@ public class SubtypeControllerTest {
     }
 
     @Test
+    public void checkGet_whenNotExistingSubtype_thenNoSubtypesAreReturned() throws Exception {
+        String subtypeName = "NotExistingSubCard";
+
+        mockMvc.perform(get("/subtype")
+                        .contentType("application/json")
+                        .queryParam("subtype", subtypeName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     public void checkPut_whenValidType_thenIsOk() throws Exception {
         mockMvc.perform(put("/subtype")
                         .contentType("application/json")
                         .content("{\"name\":\"NewSubtype\"}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void checkPutSubtype_whenInValidSubtype_thenIsBadRequest() throws Exception {
+        mockMvc.perform(put("/subtype")
+                        .contentType("application/json")
+                        .content("{\"wrongFieldName\":\"subtype1\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -84,15 +104,6 @@ public class SubtypeControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
-    @Test
-    public void checkGet_whenNotExistingSubtype_thenNoSubtypesAreReturned() throws Exception {
-        String subtypeName = "NotExistingCard";
 
-        mockMvc.perform(get("/subtype")
-                        .contentType("application/json")
-                        .queryParam("subtype", subtypeName))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
-    }
 
 }

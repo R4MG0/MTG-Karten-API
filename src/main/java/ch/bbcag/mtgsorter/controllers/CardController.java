@@ -106,7 +106,7 @@ public class CardController {
             @ApiResponse(responseCode = "400", description = "Validation failed",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Card.class))})})
-    @PutMapping(consumes = "application/json")
+    @PutMapping(consumes = "application/json", path = "{id}")
     public void update(@Valid @RequestBody @NotNull Card card) {
         try {
             cardRepository.save(card);

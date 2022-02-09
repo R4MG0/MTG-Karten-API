@@ -2,13 +2,17 @@ package ch.bbcag.mtgsorter.controllers;
 
 import ch.bbcag.mtgsorter.repositories.TypeRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,11 +67,30 @@ public class TypeControllerTest {
     }
 
     @Test
+    public void checkGet_whenNotExistingType_thenNoTypesAreReturned() throws Exception {
+        String typeName = "NotExistingCard";
+
+        mockMvc.perform(get("/type")
+                        .contentType("application/json")
+                        .queryParam("type", typeName))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     public void checkPut_whenValidType_thenIsOk() throws Exception {
         mockMvc.perform(put("/type")
                         .contentType("application/json")
                         .content("{\"type\":\"NewType\", \"typeID\":\"1\"}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void checkPutType_whenInValidType_thenIsBadRequest() throws Exception {
+        mockMvc.perform(put("/type")
+                        .contentType("application/json")
+                        .content("{\"wrongFieldName\":\"type1\"}"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -83,14 +106,5 @@ public class TypeControllerTest {
                         .contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
-    @Test
-    public void checkGet_whenNotExistingSubtype_thenNoSubtypesAreReturned() throws Exception {
-        String typeName = "NotExistingCard";
 
-        mockMvc.perform(get("/subtype")
-                        .contentType("application/json")
-                        .queryParam("type", typeName))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
-    }
 }
