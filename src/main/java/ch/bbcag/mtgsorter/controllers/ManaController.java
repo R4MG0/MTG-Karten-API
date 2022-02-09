@@ -1,6 +1,5 @@
 package ch.bbcag.mtgsorter.controllers;
 
-import ch.bbcag.mtgsorter.models.Card;
 import ch.bbcag.mtgsorter.models.Mana;
 import ch.bbcag.mtgsorter.repositories.ManaRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -40,7 +38,7 @@ public class ManaController {
         if (Strings.isNotBlank(color)) {
             return manaRepository.findByManaColor(color);
         }
-       return manaRepository.findAll();
+        return manaRepository.findAll();
     }
 
     @Operation(summary = "find a Mana color by its id")

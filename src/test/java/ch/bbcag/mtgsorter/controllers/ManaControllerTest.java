@@ -50,8 +50,8 @@ public class ManaControllerTest {
     @Test
     public void checkGet_whenNoParam_thenAllManaAreReturned() throws Exception {
         mockMvc.perform(get("/mana")
-                    .contentType("application/json"))
-        .andExpect(status().isOk());
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -1,7 +1,6 @@
 package ch.bbcag.mtgsorter.models;
 
 
-
 import javax.persistence.*;
 import javax.persistence.GenerationType;
 import javax.validation.constraints.*;
@@ -13,7 +12,6 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "name is required")
     @NotBlank(message = "Card name can't be empty")
     private String name;
 

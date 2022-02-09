@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -16,7 +16,6 @@ public class Subtype {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "name is required")
     @NotBlank(message = "Card name can't be empty")
     @Column(name = "name")
     private String subtype;

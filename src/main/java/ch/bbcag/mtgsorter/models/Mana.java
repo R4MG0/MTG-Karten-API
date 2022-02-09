@@ -13,9 +13,7 @@ public class Mana {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull(message = "color is required")
     @NotBlank(message = "Card name can't be empty")
-    @Column(name = "color")
     private String color;
 
 
